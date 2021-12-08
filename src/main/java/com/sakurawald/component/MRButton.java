@@ -16,12 +16,12 @@ public class MRButton extends ApplicationButton{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (super.getCalculator().getMemories().isEmpty()) {
-            JOptionPane.showMessageDialog(getCalculator(), "The memories is empty !");
+            JOptionPane.showMessageDialog(getCalculator(), "No memory to load !");
             return;
         }
 
         Memory latestMemory = super.getCalculator().getMemories().get(super.getCalculator().getMemories().size() - 1);
         log.debug("latestMemory = {}", latestMemory);
-        getCalculator().getTextfield_display().setText(String.valueOf(latestMemory.getValue()));
+        getCalculator().getDisplay().setText(String.valueOf(latestMemory.getValue()));
     }
 }

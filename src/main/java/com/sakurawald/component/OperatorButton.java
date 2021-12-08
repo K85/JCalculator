@@ -1,6 +1,6 @@
 package com.sakurawald.component;
 
-import java.awt.event.ActionEvent;
+import java.awt.*;
 
 public abstract class OperatorButton extends ApplicationButton {
 
@@ -8,7 +8,7 @@ public abstract class OperatorButton extends ApplicationButton {
         super(text);
     }
 
-    public abstract double postCalculate();
+    public abstract double doCalculate();
 
     @Override
     public String toString() {

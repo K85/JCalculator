@@ -2,15 +2,13 @@ package com.sakurawald.component;
 
 import java.awt.event.ActionEvent;
 
-public class InverseButton extends ApplicationButton{
+public class InverseButton extends UnaryOperatorButton {
     public InverseButton() {
         super("1/x");
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        String text = getCalculator().getTextfield_display().getText();
-        double value = 1 / Double.parseDouble(text);
-        getCalculator().getTextfield_display().setText(String.valueOf(value));
+    public double doCalculate() {
+        return  1 / getOperand();
     }
 }

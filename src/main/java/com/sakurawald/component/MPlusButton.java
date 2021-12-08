@@ -1,10 +1,12 @@
 package com.sakurawald.component;
 
 import com.sakurawald.bean.Memory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.event.ActionEvent;
 
-public class MPlusButton extends ApplicationButton{
+@Slf4j
+public class MPlusButton extends ApplicationButton {
 
     public MPlusButton() {
         super("M+");
@@ -14,8 +16,9 @@ public class MPlusButton extends ApplicationButton{
     public void actionPerformed(ActionEvent e) {
         if (getCalculator().getMemories().isEmpty()) return;
         double operand1 = getCalculator().getMemories().get(getCalculator().getMemories().size() - 1).getValue();
-        double operand2 = Double.parseDouble(getCalculator().getTextfield_display().getText());
+        double operand2 = Double.parseDouble(getCalculator().getDisplay().getText());
         double value = operand1 + operand2;
+        log.debug("operand1 = {}, operand2 = {}, value = {}", operand1, operand2, value);
         getCalculator().getMemories().add(new Memory(value));
     }
 }

@@ -12,27 +12,34 @@ public abstract class BinaryOperatorButton extends OperatorButton {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public final void actionPerformed(ActionEvent e) {
+        log.debug("operand1 = {}, operator = {}", getCalculator().getOperandFromDisplay(), this);
 
-        // Save Operand1
-        getCalculator().operand1 = Double.parseDouble(getCalculator().getTextfield_display().getText());
+        if (getCalculator().getOperands().size() == 1) {
+            getCalculator().doEqual();
 
-        // Set Display Component to empty
-        getCalculator().getTextfield_display().setText("");
+            // linked expression's value
+            double value = getOperand1();
+
+        }
+
+        // Save Operand 1
+        getCalculator().pushOperandFromDisplay();
+
+
 
         // Save Operator
-        getCalculator().operator = this;
+        getCalculator().setOperator(this);
 
-        log.debug("operand1 = {}, operator = {}", getCalculator().operand1, this);
     }
 
 
     public double getOperand1() {
-        return getCalculator().operand1;
+        return getCalculator().getOperands().get(0);
     }
 
     public double getOperand2() {
-        return Double.parseDouble(getCalculator().getTextfield_display().getText());
+        return getCalculator().getOperands().get(1);
     }
 
 }

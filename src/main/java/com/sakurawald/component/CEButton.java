@@ -10,6 +10,6 @@ public class CEButton extends ApplicationButton{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        getCalculator().getTextfield_display().setText("");
+        getCalculator().clearDisplay();
     }
 }

@@ -9,8 +9,9 @@ public class RadixPointButton extends  ApplicationButton{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String text = getCalculator().getTextfield_display().getText();
+        String text = getCalculator().getDisplay().getText();
+        if (text.indexOf('.') != -1) return;
         text = text + ".";
-        getCalculator().getTextfield_display().setText(text);
+        getCalculator().getDisplay().setText(text);
     }
 }

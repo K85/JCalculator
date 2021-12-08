@@ -14,8 +14,8 @@ public class MSButton extends ApplicationButton{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String text = this.getCalculator().getTextfield_display().getText();
-        log.debug("store memory: {}", text);
-        this.getCalculator().getMemories().add(new Memory(Double.parseDouble(text)));
+        double value = getCalculator().getOperandFromDisplay();
+        log.debug("store memory: {}", value);
+        this.getCalculator().getMemories().add(new Memory(value));
     }
 }

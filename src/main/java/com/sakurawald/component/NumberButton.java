@@ -10,8 +10,12 @@ public class NumberButton extends ApplicationButton{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String text = getCalculator().getTextfield_display().getText();
+        String text = getCalculator().getDisplay().getText();
+        // Keep the display always shows DISPLAY_DEFAULT_TEXT when the text is empty.
+        if (text.equals(getCalculator().DEFAULT_DISPLAY_TEXT))  {
+            text = "";
+        }
         text = text + this.getText();
-        getCalculator().getTextfield_display().setText(text);
+        getCalculator().getDisplay().setText(text);
     }
 }

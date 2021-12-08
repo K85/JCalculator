@@ -8,7 +8,7 @@ public class DivisionButton extends BinaryOperatorButton {
     }
 
     @Override
-    public double postCalculate() {
+    public double doCalculate() {
         return getOperand1() / getOperand2();
     }
 }

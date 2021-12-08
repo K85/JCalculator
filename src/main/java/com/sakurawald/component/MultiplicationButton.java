@@ -7,9 +7,8 @@ public class MultiplicationButton extends BinaryOperatorButton{
         super("*");
     }
 
-
     @Override
-    public double postCalculate() {
+    public double doCalculate() {
         return getOperand1() * getOperand2();
     }
 }

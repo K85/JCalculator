@@ -2,8 +2,8 @@ package com.sakurawald.component;
 
 import com.sakurawald.bean.History;
 import com.sakurawald.bean.Memory;
-import com.sakurawald.enums.CalculatorState;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -11,31 +11,33 @@ import java.awt.*;
 import java.util.ArrayList;
 
 @Slf4j
-@Data
 public class Calculator extends JPanel {
     /* Components */
     private final GridBagConstraints CONSTRAINTS = new GridBagConstraints();
-    protected JTextField textfield_display = new JTextField();
-    protected JButton button_backspace = new BackspaceButton();
-    protected JButton button_CE = new CEButton();
-    protected JButton button_C = new CButton();
-    protected ArrayList<JButton> buttons;
+    protected final String DEFAULT_DISPLAY_TEXT = "0";
+
+    @Getter
+    private final JTextField display = new JTextField(DEFAULT_DISPLAY_TEXT);
 
     /* States */
-    protected ArrayList<Memory> memories = new ArrayList<>();
-    protected ArrayList<History> histories = new ArrayList<>();
-    protected double operand1 = 0;
-    protected OperatorButton operator;
-    protected CalculatorState state = CalculatorState.WAIT_FOR_OPERAND;
+    @Getter
+    private final ArrayList<Memory> memories = new ArrayList<>();
+    @Getter
+    private final ArrayList<History> histories = new ArrayList<>();
+    @Getter
+    private final ArrayList<Double> operands = new ArrayList<>();
+    @Getter
+    @Setter
+    private OperatorButton operator;
 
     public Calculator() {
-        /* Paint com.sakurawald.bean.Calculator */
+        /* Paint Calculator */
         this.setLayout(new GridBagLayout());
-        this.textfield_display.setEditable(false);
-        addComponentWithGridBagConstraints(textfield_display, 0, 0, 7, 1);
-        addComponentWithGridBagConstraints(button_backspace, 1, 1, 2, 1);
-        addComponentWithGridBagConstraints(button_CE, 3, 1, 2, 1);
-        addComponentWithGridBagConstraints(button_C, 5, 1, 2, 1);
+        this.display.setEditable(false);
+        addComponentWithGridBagConstraints(display, 0, 0, 7, 1);
+        addComponentWithGridBagConstraints(new BackspaceButton(), 1, 1, 2, 1);
+        addComponentWithGridBagConstraints(new CEButton(), 3, 1, 2, 1);
+        addComponentWithGridBagConstraints(new CButton(), 5, 1, 2, 1);
         ArrayList<ApplicationButton> buttons = new ArrayList<>() {
             {
                 this.add(new MCButton());
@@ -76,7 +78,7 @@ public class Calculator extends JPanel {
         }
     }
 
-    public void addComponentWithGridBagConstraints(Component component, int gridx, int gridy, int gridwidth, int gridheight) {
+    private void addComponentWithGridBagConstraints(Component component, int gridx, int gridy, int gridwidth, int gridheight) {
         CONSTRAINTS.gridx = gridx;
         CONSTRAINTS.gridy = gridy;
         CONSTRAINTS.gridwidth = gridwidth;
@@ -84,6 +86,46 @@ public class Calculator extends JPanel {
         CONSTRAINTS.fill = GridBagConstraints.HORIZONTAL;
         CONSTRAINTS.insets = new Insets(3, 3, 3, 3);
         this.add(component, CONSTRAINTS);
+    }
+
+
+    public void pushOperandFromDisplay() {
+        this.operands.add(getOperandFromDisplay());
+        this.clearDisplay();
+    }
+
+    public double getOperandFromDisplay() {
+        return Double.parseDouble(this.display.getText());
+    }
+
+    public void setOperandToDisplay(double operand) {
+        this.display.setText(String.valueOf(operand));
+    }
+
+    public void clearDisplay() {
+        this.display.setText(DEFAULT_DISPLAY_TEXT);
+    }
+
+    public void doEqual() {
+
+        // Expression's Reflexivity
+        if (getOperator() == null) {
+            return;
+        }
+
+        // Push current display value as the last operand
+        this.pushOperandFromDisplay();
+        log.debug("operator = {}, operands = {}", operator, operands);
+
+        // Eval the expression
+        double value = getOperator().doCalculate();
+
+        // Update the display
+        this.setOperandToDisplay(value);
+
+        // Clear the expression
+        this.getOperands().clear();
+        this.setOperator(null);
     }
 
 }
