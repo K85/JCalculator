@@ -14,18 +14,12 @@ public abstract class BinaryOperatorButton extends OperatorButton {
     @Override
     public final void actionPerformed(ActionEvent e) {
         log.debug("operand1 = {}, operator = {}", getCalculator().getOperandFromDisplay(), this);
-
         if (getCalculator().getOperands().size() == 1) {
             getCalculator().doEqual();
-
-            // linked expression's value
-            double value = getOperand1();
-
         }
 
         // Save Operand 1
         getCalculator().pushOperandFromDisplay();
-
 
 
         // Save Operator
@@ -41,5 +35,6 @@ public abstract class BinaryOperatorButton extends OperatorButton {
     public double getOperand2() {
         return getCalculator().getOperands().get(1);
     }
-
 }
+
+
