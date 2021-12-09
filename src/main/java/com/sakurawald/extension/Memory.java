@@ -1,4 +1,4 @@
-package com.sakurawald.bean;
+package com.sakurawald.extension;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

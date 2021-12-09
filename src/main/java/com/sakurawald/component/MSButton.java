@@ -1,6 +1,6 @@
 package com.sakurawald.component;
 
-import com.sakurawald.bean.Memory;
+import com.sakurawald.extension.Memory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.event.ActionEvent;

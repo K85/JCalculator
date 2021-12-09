@@ -1,7 +1,7 @@
 package com.sakurawald.component;
 
-import com.sakurawald.bean.History;
-import com.sakurawald.bean.Memory;
+import com.sakurawald.extension.History;
+import com.sakurawald.extension.Memory;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
