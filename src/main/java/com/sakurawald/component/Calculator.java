@@ -1,9 +1,11 @@
 package com.sakurawald.component;
 
-import com.sakurawald.extension.History;
-import com.sakurawald.extension.Memory;
+import com.sakurawald.bean.History;
+import com.sakurawald.bean.Memory;
+import com.sakurawald.event.EventCenter;
+import com.sakurawald.event.Listener;
+import com.sakurawald.event.events.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -23,11 +25,8 @@ public class Calculator extends JPanel {
     @Getter
     private final ArrayList<Memory> memories = new ArrayList<>();
     @Getter
-    private final ArrayList<History> histories = new ArrayList<>();
-    @Getter
     private final ArrayList<Double> operands = new ArrayList<>();
     @Getter
-    @Setter
     private OperatorButton operator;
 
     public Calculator() {
@@ -76,6 +75,15 @@ public class Calculator extends JPanel {
             gridx++;
             addComponentWithGridBagConstraints(button, gridx, gridy, 1, 1);
         }
+
+        /* Register Events */
+        EventCenter.register(new Listener<RequestChangeDisplayEvent>() {
+            @Override
+            public void onEvent(RequestChangeDisplayEvent event) {
+                if (event.isCancelled()) return;
+                getDisplay().setText(event.getNewDisplay());
+            }
+        });
     }
 
     private void addComponentWithGridBagConstraints(Component component, int gridx, int gridy, int gridwidth, int gridheight) {
@@ -90,19 +98,42 @@ public class Calculator extends JPanel {
 
 
     public void pushOperandFromDisplay() {
-        this.operands.add(getOperandFromDisplay());
+        /* Get operand from display */
+        double operand;
+        try {
+            operand = getOperandFromDisplay();
+        } catch (Exception e) {
+            return;
+        }
+
+        /* Fire event */
+        var event = new PushOperandEvent(operand);
+        EventCenter.fire(event);
+
+        /* Push operand to operands */
+        this.operands.add(event.getOperand());
         this.clearDisplay();
     }
 
     public double getOperandFromDisplay() {
-        return Double.parseDouble(this.display.getText());
+        try {
+            return Double.parseDouble(this.display.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Error Input Number !",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            // Re-throw the exception to stop the following instructions.
+            throw e;
+        }
     }
 
     public void setOperandToDisplay(double operand) {
-        this.display.setText(String.valueOf(operand));
+        var event = new SetOperandToDisplayEvent(getOperandFromDisplay(), operand);
+        EventCenter.fire(event);
+        this.display.setText(String.valueOf(event.getNewOperand()));
     }
 
     public void clearDisplay() {
+        EventCenter.fire(new ClearDisplayEvent(this.display.getText()));
         this.display.setText(DEFAULT_DISPLAY_TEXT);
     }
 
@@ -118,14 +149,33 @@ public class Calculator extends JPanel {
         log.debug("operator = {}, operands = {}", operator, operands);
 
         // Eval the expression
-        double value = getOperator().doCalculate();
+        double value = this.getOperator().doCalculate();
+
+        // Fire -> HistorySpawnEvent
+        History history = new History(new ArrayList<>(getOperands()), getOperator().toString(), value);
+        EventCenter.fire(new HistorySpawnEvent(history));
 
         // Update the display
         this.setOperandToDisplay(value);
 
         // Clear the expression
-        this.getOperands().clear();
+        this.clearOperands();
+        this.clearOperator();
+    }
+
+    public void clearOperator() {
         this.setOperator(null);
+    }
+
+    public void setOperator(OperatorButton operator) {
+        var event = new SetOperatorEvent(this.operator, operator);
+        EventCenter.fire(event);
+        this.operator = event.getNewOperator();
+    }
+
+    public void clearOperands() {
+        EventCenter.fire(new ClearOperandsEvent(this.getOperands()));
+        this.getOperands().clear();
     }
 
 }

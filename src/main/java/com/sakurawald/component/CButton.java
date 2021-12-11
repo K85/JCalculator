@@ -10,7 +10,7 @@ public class CButton extends ApplicationButton{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        getCalculator().getOperands().clear();
+        getCalculator().clearOperator();
         getCalculator().setOperator(null);
         getCalculator().clearDisplay();
     }

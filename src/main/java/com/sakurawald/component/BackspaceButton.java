@@ -10,6 +10,7 @@ public class BackspaceButton extends ApplicationButton {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // This function escape from the event system.
         String text = getCalculator().getDisplay().getText();
         getCalculator().getDisplay().setText(text.substring(0, text.length() - 1));
         if (getCalculator().getDisplay().getText().isEmpty()) {

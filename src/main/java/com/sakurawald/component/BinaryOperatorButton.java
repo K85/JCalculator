@@ -14,6 +14,8 @@ public abstract class BinaryOperatorButton extends OperatorButton {
     @Override
     public final void actionPerformed(ActionEvent e) {
         log.debug("operand1 = {}, operator = {}", getCalculator().getOperandFromDisplay(), this);
+
+        // Wait for the last operand ?
         if (getCalculator().getOperands().size() == 1) {
             getCalculator().doEqual();
         }
@@ -21,10 +23,8 @@ public abstract class BinaryOperatorButton extends OperatorButton {
         // Save Operand 1
         getCalculator().pushOperandFromDisplay();
 
-
         // Save Operator
         getCalculator().setOperator(this);
-
     }
 
 

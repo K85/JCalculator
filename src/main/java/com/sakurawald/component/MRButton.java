@@ -1,6 +1,8 @@
 package com.sakurawald.component;
 
-import com.sakurawald.extension.Memory;
+import com.sakurawald.event.EventCenter;
+import com.sakurawald.event.events.MemoriesReloadEvent;
+import com.sakurawald.bean.Memory;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -21,7 +23,11 @@ public class MRButton extends ApplicationButton{
         }
 
         Memory latestMemory = super.getCalculator().getMemories().get(super.getCalculator().getMemories().size() - 1);
-        log.debug("latestMemory = {}", latestMemory);
-        getCalculator().getDisplay().setText(String.valueOf(latestMemory.getValue()));
+
+        // Fire Event
+        EventCenter.fire(new MemoriesReloadEvent(latestMemory));
+
+        // Reload Memory
+        getCalculator().setOperandToDisplay(latestMemory.getValue());
     }
 }

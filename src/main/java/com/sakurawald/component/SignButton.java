@@ -13,7 +13,7 @@ public class SignButton extends ApplicationButton{
         if (text.isEmpty()) return;
         else if (text.charAt(0) == '0') return;
         else if (text.charAt(0) == '+') return;
-        else if (text.charAt(0) == '-') text = text.substring(1, text.length());
+        else if (text.charAt(0) == '-') text = text.substring(1);
         else text = "-" + text;
         getCalculator().getDisplay().setText(text);
     }
